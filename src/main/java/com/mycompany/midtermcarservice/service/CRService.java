@@ -1,22 +1,25 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Car Reservation System
+ * Methods to pull a list of all reservation, reservation Id, Customer Id,
+ * and date submitted
  */
 package com.mycompany.midtermcarservice.service;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Query;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
-import com.mycompany.midtermcarservice.model.CarType;
 import com.mycompany.midtermcarservice.model.Customer;
 import com.mycompany.midtermcarservice.model.Reservation;
-import com.mycompany.midtermcarservice.model.carRental;
+import com.mycompany.midtermcarservice.model.officeLocation;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -32,29 +35,23 @@ public class CRService extends DBConnection {
   }
  
  
-/*All*/
-  public List<carRental> all() throws InterruptedException, ExecutionException {
-	List<carRental> results = new ArrayList<>();
-  
-	// asynchronously retrieve all users
-	ApiFuture<QuerySnapshot> query = db.collection("CarReservation").get();
-	
-	// query.get() blocks (stops other processes from excuting) on response 
-	// call to firebase
-	QuerySnapshot querySnapshot = query.get();
-	
-	//getting the result set 
-	List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
-   
-      //loop over result set and add them to list
-      documents.forEach(document -> {
-          results.add(document.toObject(carRental.class));
+/*returns all reservations*/
+ public List<Reservation> all()throws InterruptedException, ExecutionException{
+      
+      List<Reservation> resultList = new ArrayList<>();
+      
+      ApiFuture<QuerySnapshot> query = db.collection ("CarReservation").get();
+      
+      QuerySnapshot querySnapshot = query.get();
+                    
+      List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+      
+      //loop over result set
+      documents.forEach(document -> { 
+          resultList.add(document.toObject(Reservation.class));
       });
-	
-	return results;
-  }
-  
-  
+  return resultList;
+ } 
   
 /*return all car reservation by Id*/
 public Reservation findByreservationId(int reservationId) throws InterruptedException, ExecutionException{
@@ -91,28 +88,50 @@ public Reservation findByreservationId(int reservationId) throws InterruptedExce
   return null;
     }
  
+ 
+ public String createCarReservatin(int customerId, Customer fName, Customer lName, ArrayList<officeLocation> officeNum)
+            throws ParseException, InterruptedException, ExecutionException {
+        
+        SimpleDateFormat formatter =  new SimpleDateFormat ("yyyy-MM-dd 00:00:00");
+        String now = 
+                formatter.format(new Date(System.currentTimeMillis()));
+        Date submitted = formatter.parse(now);
+        
+        Random rand = new Random();
+        int id = rand.nextInt(10000);
+        
+        Reservation newReservation = 
+                new Reservation(customerId, submitted, fName, lName, officeNum);
+        
+        ApiFuture<DocumentReference> future =
+                db.collection("CarReservation").add(newReservation);
+        
+        DocumentReference doc = future.get();
+        
+        return doc.getId();
+    }  
+ 
  /*return all by confirm date*/
- public ArrayList<Reservation> findBySubmittedDate(Date submitted) throws InterruptedException, ExecutionException{
+ public ArrayList<officeLocation> findBySubmittedDate(Date submitted) throws InterruptedException, ExecutionException{
     
-	ArrayList<Reservation> resultList = new ArrayList<>();
+	ArrayList<officeLocation> resultList = new ArrayList<>();
    
-	CollectionReference  reservation = db.collection("CarReservation");
-	Query query = reservation.whereEqualTo("submitted", submitted);
+	CollectionReference  officeLocation = db.collection("CarReservation");
+	Query query = officeLocation.whereEqualTo("submitted", submitted);
 	
 	ApiFuture<QuerySnapshot> querySnapshot = query.get();
   
 	List<QueryDocumentSnapshot> documents = querySnapshot.get().getDocuments();
 	
         documents.forEach(document -> {
-            resultList.add(document.toObject(Reservation.class));
+            resultList.add(document.toObject(officeLocation.class));
       });
    
    return resultList;
     } 
 
-    public String createCarReservation(int customerId, carRental confirmationNum, Customer fName, Customer lName, carRental pickupLocation, Customer Phone, ArrayList<CarType> rent) {
+    public String createCarReservatin(String confirmationNum, Customer fName, Customer lName, ArrayList<officeLocation> officeNum) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
 }

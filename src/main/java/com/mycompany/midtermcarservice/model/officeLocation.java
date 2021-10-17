@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Car Reservation System
+ * Class Office location to pickup car from.
+ * 
  */
 package com.mycompany.midtermcarservice.model;
 
@@ -23,7 +23,7 @@ public class officeLocation {
     private String officeState;
     private String officeZip;
     private String officePhone;
-    private ArrayList<String> officeStreet;
+    private ArrayList<String> officeNum;
 
     
     public officeLocation(){}
@@ -36,7 +36,7 @@ public class officeLocation {
         this.officeState = officeState;
         this.officeZip = officeZip;
         this.officePhone = officePhone;
-        this.officeStreet = officeStreet;
+        this.officeNum = officeNum;
     }
    
 /*set*/
@@ -61,8 +61,8 @@ public class officeLocation {
         this.officePhone = officePhone;
     }
 
-    public void setOfficeStreet(ArrayList<String> officeStreet) {
-        this.officeStreet = officeStreet;
+    public void setOfficeNum(ArrayList<String> officeNum) {
+        this.officeNum = officeNum;
     }
   
   /*get*/  
@@ -87,8 +87,8 @@ public class officeLocation {
         return officePhone;
     }
 
-    public ArrayList<String> getOfficeStreet() {
-        return officeStreet;
+    public ArrayList<String> getOfficeNum() {
+        return officeNum;
     }
     
 }

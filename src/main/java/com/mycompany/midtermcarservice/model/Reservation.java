@@ -1,9 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Car Reservation System
+ * Used to retrieve the cost of the rental based on car to be rented.
  */
 package com.mycompany.midtermcarservice.model;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -20,6 +22,10 @@ public Reservation(){
 public Reservation(double totalCost, String carId, String vinNum, String Description) {
         super(carId, vinNum, Description);
         this.totalCost = totalCost;
+    }
+
+    public Reservation(int customerId, Date submitted, Customer fName, Customer lName, ArrayList<officeLocation> officeNum) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public double getTotalCost() {
