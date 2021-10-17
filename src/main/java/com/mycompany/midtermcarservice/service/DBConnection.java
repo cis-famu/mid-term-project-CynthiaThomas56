@@ -31,7 +31,7 @@ public class DBConnection {
 		//Open the credential json file 
         FileInputStream serviceAccount;
         try{
-            serviceAccount = new FileInputStream("E:\\Web Services\\oval-bricolage-328021-12090ab2d74f.json");
+            serviceAccount = new FileInputStream("E:\\Web Services\\carreservation-328921-firebase-adminsdk-3nkg7-8df1464d00.json");
         
 		//set up database connection
             FirestoreOptions firestoreOptions =
